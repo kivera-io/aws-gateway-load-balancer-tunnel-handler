@@ -37,7 +37,7 @@ extern int debug;
 //#define NO_RETURN_TRAFFIC
 
 // Thread configuration parser and data struct
-#define MAX_THREADS    128
+#define MAX_THREADS    1024
 typedef struct ThreadConfigStruct {
     std::vector<int> cfg;
 } ThreadConfig;
