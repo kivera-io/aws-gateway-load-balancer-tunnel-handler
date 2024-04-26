@@ -1,0 +1,40 @@
+name: Auto Build & Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  BuildAndRelease:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    env:
+      TIER: prod
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          aws-region: ap-southeast-2
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: gwlbtun-wf
+          role-duration-seconds: 3600
+          mask-aws-account-id: true
+      - name: Setup
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          npm install -g standard-version
+      - name: Version
+        run: make version
+      - name: Build
+        run: make build
+      - name: Upload
+        run: make upload
