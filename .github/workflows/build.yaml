@@ -1,0 +1,26 @@
+name: Auto Build & Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  BuildAndRelease:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: AWS Credentials
+        uses: kivera-io/infra-deployer/actions/aws-creds@v0.1.36
+        with:
+          tier: prod
+          role_name: prod-oidc-github-automation
+      - name: Build
+        run: |
+          make build
+      - name: Upload
+        run: |
+          make upload
