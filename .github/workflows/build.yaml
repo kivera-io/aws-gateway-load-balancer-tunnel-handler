@@ -32,9 +32,9 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           npm install -g standard-version
-      - name: Version
-        run: make version
       - name: Build
         run: make build
+      - name: Version
+        run: make version
       - name: Upload
         run: make upload
